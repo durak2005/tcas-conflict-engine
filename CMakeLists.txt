@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.16)
+project(tcas_conflict_engine CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(MSVC)
+  add_compile_options(/W4)
+else()
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+add_library(tcas src/tcas.cpp)
+target_include_directories(tcas PUBLIC include)
+
+add_executable(tcas_sim src/main.cpp)
+target_link_libraries(tcas_sim PRIVATE tcas)
+
+enable_testing()
+add_executable(tcas_tests tests/test_tcas.cpp)
+target_link_libraries(tcas_tests PRIVATE tcas)
+add_test(NAME tcas_tests COMMAND tcas_tests)
